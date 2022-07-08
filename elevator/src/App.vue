@@ -29,62 +29,84 @@ export default {
     call_Elevator(lvl){
       this.calls.push(lvl)
       console.log(this.calls)
-        if(this.calls[0] == 1){
+      if(this.calls[0] == this.calls[this.calls.length - 1]){ //если лифт уже на выбранном этаже, то последний вызов удаляем
+        this.calls.pop()
+      }
+      for(let i=0; i < this.calls; i+=1){ //если последний вызов уже есть в очереди - удаляем последний вызов
+        if(this.calls[i] == this.calls[this.calls.length - 1]){
+          this.calls.pop()
+        }
+      }
+      this.choose_Level()
+    },
+
+    choose_Level(){
+      if(this.calls[0] == 1){
           this.move_Elevator1()
-          this.calls.shift()
-          console.log(this.calls)
         }else if(this.calls[0] == 2){
           this.move_Elevator2()
-          this.calls.shift()
-          console.log(this.calls)
         }else if(this.calls[0] == 3){
           this.move_Elevator3()
-          this.calls.shift()
-          console.log(this.calls)
         }else if(this.calls[0] == 4){
           this.move_Elevator4()
-          this.calls.shift()
-          console.log(this.calls)
         }else if(this.calls[0] == 5){
           this.move_Elevator5()
-          this.calls.shift()
-          console.log(this.calls)
         }
-      },
+        // this.calls.shift()
+        // console.log(this.calls)
+    },
 
     move_Elevator5() {
       document.getElementById('elevator').style.top= "65px"
       document.getElementById('call5').disabled = true
-      setTimeout(3000)
-      document.getElementById('call5').disabled = false
-      },
+      document.getElementById('call4').disabled = false
+      document.getElementById('call3').disabled = false
+      document.getElementById('call2').disabled = false
+      document.getElementById('call1').disabled = false
+      setTimeout(function(){},3000)
+      setTimeout(function(){this.calls.shift()}, 3000)
+    }, 
 
     move_Elevator4() {
       document.getElementById('elevator').style.top= "225px"
       document.getElementById('call4').disabled = true
-      setTimeout(() => 3000)
       document.getElementById('call5').disabled = false
+      document.getElementById('call3').disabled = false
+      document.getElementById('call2').disabled = false
+      document.getElementById('call1').disabled = false
+      setTimeout(function(){this.calls.shift()}, 3000)
     }, 
 
     move_Elevator3() {
       document.getElementById('elevator').style.top= "380px"
       document.getElementById('call3').disabled = true
-      setTimeout(() => 3000)
       document.getElementById('call5').disabled = false
+      document.getElementById('call4').disabled = false
+      document.getElementById('call2').disabled = false
+      document.getElementById('call1').disabled = false
+      setTimeout(function(){this.calls.shift()}, 3000)
     }, 
 
     move_Elevator2() {
       document.getElementById('elevator').style.top= "540px"
       document.getElementById('call2').disabled = true
-      setTimeout(() => 3000)
       document.getElementById('call5').disabled = false
+      document.getElementById('call4').disabled = false
+      document.getElementById('call3').disabled = false
+      document.getElementById('call1').disabled = false
+      setTimeout(function(){this.calls.shift()}, 3000)
     }, 
 
     move_Elevator1() {
       document.getElementById('elevator').style.top= "700px"
       document.getElementById('call1').disabled = true
-      setTimeout(() => 5000)
-    },   
+      document.getElementById('call5').disabled = false
+      document.getElementById('call4').disabled = false
+      document.getElementById('call3').disabled = false
+      document.getElementById('call2').disabled = false
+      setTimeout(function(){this.call_Elevator}, 3000)
+    },  
+
   }
 }
 
@@ -127,10 +149,10 @@ img{
   width: 150px;
   height: 150px;
   position: absolute;
-  transition: all 2.5s ease-in-out;
-  -webkit-transition: all 2.5s ease-in-out; /** Chrome & Safari **/
-  -moz-transition: all 2.5s ease-in-out; /** Firefox **/
-  -o-transition: all 2.5s ease-in-out; /** Opera **/
+  transition: all 2.7s ease-in-out;
+  -webkit-transition: all 2.7s ease-in-out; /** Chrome & Safari **/
+  -moz-transition: all 2.7s ease-in-out; /** Firefox **/
+  -o-transition: all 2.7s ease-in-out; /** Opera **/
 }
 
 .elevator{
@@ -138,7 +160,7 @@ img{
     left: 15px;
 }
 
-#elev .move-up5 {
+/* #elev .move-up5 {
     transform: translate(0,-636px);
     -webkit-transform: translate(0,-636px);
     -o-transform: translate(0,-636px);
@@ -171,6 +193,6 @@ img{
     -webkit-transform: translate(0, 0px);
     -o-transform: translate(0,0px);
     -moz-transform: translate(0,0px);
-} 
+}  */
 
 </style>
