@@ -7,9 +7,9 @@
     <tr><td class="elevator_sh"> </td><td class="lvl"> <button id="call2" class="call" @click="call_Elevator(2)" value="2" ref="button4">2</button> </td></tr>
     <tr><td class="elevator_sh"> </td><td class="lvl"> <button id="call1" class="call" @click="call_Elevator(1)" value="1" ref="button5">1</button> </td></tr>
     <div id="elev" class="elev">
-     <img id="elevator" class="elevator" src="https://www.fujihd.com/wp-content/uploads/2018/12/HD-JX01.jpg"/>
+     <img id="elevator" class="elevator" src="https://www.fujihd.com/wp-content/uploads/2018/12/HD-JX01.jpg" @transitionend="stop_Elevator()"/>
     </div>
-    </table>
+  </table>
     
 </template>
 
@@ -20,71 +20,60 @@ export default {
   components: { },
   data(){
     return{
-      calls: []
+      calls: [],
+      call: 0
     }
+  },
+
+  mounted(){
+    //загрузка из локала переменных
   },
 
   methods: {
 
     call_Elevator(lvl){
-      this.calls.push(lvl)
-      console.log(this.calls)
-        if(this.calls[0] == 1){
-          this.move_Elevator1()
-          this.calls.shift()
-          console.log(this.calls)
-        }else if(this.calls[0] == 2){
-          this.move_Elevator2()
-          this.calls.shift()
-          console.log(this.calls)
-        }else if(this.calls[0] == 3){
-          this.move_Elevator3()
-          this.calls.shift()
-          console.log(this.calls)
-        }else if(this.calls[0] == 4){
-          this.move_Elevator4()
-          this.calls.shift()
-          console.log(this.calls)
-        }else if(this.calls[0] == 5){
-          this.move_Elevator5()
-          this.calls.shift()
-          console.log(this.calls)
+      console.log('lvl=', lvl)
+      if(this.calls.length > 0){
+        for(let i=0; i<this.calls.length; i++){ //проверяем очередь на совпадение с выбранным этажом
+          if(lvl == this.calls[i]){
+            return;
+          }
         }
-      },
+      }
+      this.calls.push(lvl) //тут в локал
 
-    move_Elevator5() {
-      document.getElementById('elevator').style.top= "65px"
-      document.getElementById('call5').disabled = true
-      setTimeout(3000)
-      document.getElementById('call5').disabled = false
-      },
+      this.command_calls()
+    },
 
-    move_Elevator4() {
-      document.getElementById('elevator').style.top= "225px"
-      document.getElementById('call4').disabled = true
-      setTimeout(() => 3000)
-      document.getElementById('call5').disabled = false
+    command_calls(){
+      console.log('command calls', this.calls.length)
+      if(this.calls.length > 0){
+        console.log('calls=', this.calls)
+        this.call = this.calls[0] //тут в локал
+        console.log('call=', this.call)
+        this.move_Elevator()
+      }
+    },
+
+    move_Elevator() {
+      let options = { 
+        5: '65px',
+        4: '225px',
+        3: '380px',
+        2: '540px',
+        1: '700px'
+      }
+      console.log(this.call)
+      console.log(options)
+      document.getElementById('elevator').style.top = options[this.call]
     }, 
 
-    move_Elevator3() {
-      document.getElementById('elevator').style.top= "380px"
-      document.getElementById('call3').disabled = true
-      setTimeout(() => 3000)
-      document.getElementById('call5').disabled = false
-    }, 
+    stop_Elevator(){
+      console.log('Stop elevator')
+      this.calls.shift() //тут в локал
+      setTimeout(this.command_calls, 3000)
+    },
 
-    move_Elevator2() {
-      document.getElementById('elevator').style.top= "540px"
-      document.getElementById('call2').disabled = true
-      setTimeout(() => 3000)
-      document.getElementById('call5').disabled = false
-    }, 
-
-    move_Elevator1() {
-      document.getElementById('elevator').style.top= "700px"
-      document.getElementById('call1').disabled = true
-      setTimeout(() => 5000)
-    },   
   }
 }
 
@@ -127,50 +116,15 @@ img{
   width: 150px;
   height: 150px;
   position: absolute;
-  transition: all 2.5s ease-in-out;
-  -webkit-transition: all 2.5s ease-in-out; /** Chrome & Safari **/
-  -moz-transition: all 2.5s ease-in-out; /** Firefox **/
-  -o-transition: all 2.5s ease-in-out; /** Opera **/
+  transition: all 2.7s ease-in-out;
+  -webkit-transition: all 2.7s ease-in-out; /** Chrome & Safari **/
+  -moz-transition: all 2.7s ease-in-out; /** Firefox **/
+  -o-transition: all 2.7s ease-in-out; /** Opera **/
 }
 
 .elevator{
     top: 699px;
     left: 15px;
 }
-
-#elev .move-up5 {
-    transform: translate(0,-636px);
-    -webkit-transform: translate(0,-636px);
-    -o-transform: translate(0,-636px);
-    -moz-transform: translate(0,-636px);
-} 
-
-#elev .move-up4 {
-    transform: translate(0,-477px);
-    -webkit-transform: translate(0,-477px);
-    -o-transform: translate(0,-477px);
-    -moz-transform: translate(0,-477px);
-} 
-
-#elev .move-up3 {
-    transform: translate(0,-318px);
-    -webkit-transform: translate(0,-318px);
-    -o-transform: translate(0,-318px);
-    -moz-transform: translate(0,-318px);
-} 
-
-#elev .move-up2 {
-    transform: translate(0,-159px);
-    -webkit-transform: translate(0,-159px);
-    -o-transform: translate(0,-159px);
-    -moz-transform: translate(0,-159px);
-} 
-
-#elev .move-up1 {
-    transform: translate(0,0px);
-    -webkit-transform: translate(0, 0px);
-    -o-transform: translate(0,0px);
-    -moz-transform: translate(0,0px);
-} 
 
 </style>
