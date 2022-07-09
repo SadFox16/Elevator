@@ -7,9 +7,9 @@
     <tr><td class="elevator_sh"> </td><td class="lvl"> <button id="call2" class="call" @click="call_Elevator(2)" value="2" ref="button4">2</button> </td></tr>
     <tr><td class="elevator_sh"> </td><td class="lvl"> <button id="call1" class="call" @click="call_Elevator(1)" value="1" ref="button5">1</button> </td></tr>
     <div id="elev" class="elev">
-     <img id="elevator" class="elevator" src="https://www.fujihd.com/wp-content/uploads/2018/12/HD-JX01.jpg"/>
+     <img id="elevator" class="elevator" src="https://www.fujihd.com/wp-content/uploads/2018/12/HD-JX01.jpg" @transitionend="stop_Elevator()"/>
     </div>
-    </table>
+  </table>
     
 </template>
 
@@ -20,92 +20,59 @@ export default {
   components: { },
   data(){
     return{
-      calls: []
+      calls: [],
+      call: 0
     }
+  },
+
+  mounted(){
+    //загрузка из локала переменных
   },
 
   methods: {
 
     call_Elevator(lvl){
-      this.calls.push(lvl)
-      console.log(this.calls)
-      if(this.calls[0] == this.calls[this.calls.length - 1]){ //если лифт уже на выбранном этаже, то последний вызов удаляем
-        this.calls.pop()
-      }
-      for(let i=0; i < this.calls; i+=1){ //если последний вызов уже есть в очереди - удаляем последний вызов
-        if(this.calls[i] == this.calls[this.calls.length - 1]){
-          this.calls.pop()
+      console.log('lvl=', lvl)
+      if(this.calls.length > 0){
+        for(let i=0; i<this.calls.length; i++){ //проверяем очередь на совпадение с выбранным этажом
+          if(lvl == this.calls[i]){
+            return;
+          }
         }
       }
-      this.choose_Level()
+      this.calls.push(lvl) //тут в локал
+
+      this.command_calls()
     },
 
-    choose_Level(){
-      if(this.calls[0] == 1){
-          this.move_Elevator1()
-        }else if(this.calls[0] == 2){
-          this.move_Elevator2()
-        }else if(this.calls[0] == 3){
-          this.move_Elevator3()
-        }else if(this.calls[0] == 4){
-          this.move_Elevator4()
-        }else if(this.calls[0] == 5){
-          this.move_Elevator5()
-        }
-        // this.calls.shift()
-        // console.log(this.calls)
+    command_calls(){
+      console.log('command calls', this.calls.length)
+      if(this.calls.length > 0){
+        console.log('calls=', this.calls)
+        this.call = this.calls[0] //тут в локал
+        console.log('call=', this.call)
+        this.move_Elevator()
+      }
     },
 
-    move_Elevator5() {
-      document.getElementById('elevator').style.top= "65px"
-      document.getElementById('call5').disabled = true
-      document.getElementById('call4').disabled = false
-      document.getElementById('call3').disabled = false
-      document.getElementById('call2').disabled = false
-      document.getElementById('call1').disabled = false
-      setTimeout(function(){},3000)
-      setTimeout(function(){this.calls.shift()}, 3000)
+    move_Elevator() {
+      let options = { 
+        5: '65px',
+        4: '225px',
+        3: '380px',
+        2: '540px',
+        1: '700px'
+      }
+      console.log(this.call)
+      console.log(options)
+      document.getElementById('elevator').style.top = options[this.call]
     }, 
 
-    move_Elevator4() {
-      document.getElementById('elevator').style.top= "225px"
-      document.getElementById('call4').disabled = true
-      document.getElementById('call5').disabled = false
-      document.getElementById('call3').disabled = false
-      document.getElementById('call2').disabled = false
-      document.getElementById('call1').disabled = false
-      setTimeout(function(){this.calls.shift()}, 3000)
-    }, 
-
-    move_Elevator3() {
-      document.getElementById('elevator').style.top= "380px"
-      document.getElementById('call3').disabled = true
-      document.getElementById('call5').disabled = false
-      document.getElementById('call4').disabled = false
-      document.getElementById('call2').disabled = false
-      document.getElementById('call1').disabled = false
-      setTimeout(function(){this.calls.shift()}, 3000)
-    }, 
-
-    move_Elevator2() {
-      document.getElementById('elevator').style.top= "540px"
-      document.getElementById('call2').disabled = true
-      document.getElementById('call5').disabled = false
-      document.getElementById('call4').disabled = false
-      document.getElementById('call3').disabled = false
-      document.getElementById('call1').disabled = false
-      setTimeout(function(){this.calls.shift()}, 3000)
-    }, 
-
-    move_Elevator1() {
-      document.getElementById('elevator').style.top= "700px"
-      document.getElementById('call1').disabled = true
-      document.getElementById('call5').disabled = false
-      document.getElementById('call4').disabled = false
-      document.getElementById('call3').disabled = false
-      document.getElementById('call2').disabled = false
-      setTimeout(function(){this.call_Elevator}, 3000)
-    },  
+    stop_Elevator(){
+      console.log('Stop elevator')
+      this.calls.shift() //тут в локал
+      setTimeout(this.command_calls, 3000)
+    },
 
   }
 }
@@ -159,40 +126,5 @@ img{
     top: 699px;
     left: 15px;
 }
-
-/* #elev .move-up5 {
-    transform: translate(0,-636px);
-    -webkit-transform: translate(0,-636px);
-    -o-transform: translate(0,-636px);
-    -moz-transform: translate(0,-636px);
-} 
-
-#elev .move-up4 {
-    transform: translate(0,-477px);
-    -webkit-transform: translate(0,-477px);
-    -o-transform: translate(0,-477px);
-    -moz-transform: translate(0,-477px);
-} 
-
-#elev .move-up3 {
-    transform: translate(0,-318px);
-    -webkit-transform: translate(0,-318px);
-    -o-transform: translate(0,-318px);
-    -moz-transform: translate(0,-318px);
-} 
-
-#elev .move-up2 {
-    transform: translate(0,-159px);
-    -webkit-transform: translate(0,-159px);
-    -o-transform: translate(0,-159px);
-    -moz-transform: translate(0,-159px);
-} 
-
-#elev .move-up1 {
-    transform: translate(0,0px);
-    -webkit-transform: translate(0, 0px);
-    -o-transform: translate(0,0px);
-    -moz-transform: translate(0,0px);
-}  */
 
 </style>
