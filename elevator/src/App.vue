@@ -31,14 +31,12 @@ export default {
     console.log(localStorage)
     if(localStorage.getItem('call') != 0){
       this.call = localStorage.getItem('call')
-      console.log('call=', this.call)
     }else{
       this.call = 0
     }
     console.log('localStorage.calls=', localStorage.calls)
     if(JSON.parse(localStorage.getItem('calls')).length != 0){
       this.calls = this.calls.concat(JSON.parse(localStorage.getItem('calls')))
-      console.log('calls=', this.calls)
     }else{
       this.calls.length = 0
     }
